@@ -1,16 +1,16 @@
 # Study_201507
-1. Lời nói đầu
+I/ Lời nói đầu
    Hiện nay có rất nhiều ứng dụng chat video trực tuyến để làm viêc, chat với bạn bè... như hangout, skype..
 Các ứng dụng có thể chạy trên các nền tảng web browser, ios, android... Ta có thể dễ dàng tạo một streaming để chat
 video với opentok. Trên browser nó dựa vào nền tảng webRTC để thực hiện việc truyền các gòi tin đa phương tiện bằng 
 javascript
 
-2. OpenTok là gì?:
+II/ OpenTok là gì?:
   Opentok là một ứng dụng chat dựa trên nền tảng web. Bạn có thể vào trang chủ của TokBox để tạo một tài khoản đăng nhập và mời mọi người tham gia chat video với bạn thông qua trình duyệt web. Một tính năng cao cấp khác của TokBox là khả năng tích hợp với các dịch vụ web khác như Facebook, Meebo. Bạn có thể cài đặt add-on TokBox cho Facebook Firefox để có thể sử dụng tính năng chat video nhanh chóng với bạn bè trong tài khoản Facebook.
 Opentok sẽ dựa vào nền tảng webRTC để gửi các gói tin đa phương tiện qua javascript giúp tạo một streaming để chat.
 TODO: Có thể tìm hiểu qua opentok sdk cho mobile app
 video.
-3. Sử dụng OpenTok để tạo 1 kênh chat với Rails
+III/ Sử dụng OpenTok để tạo 1 kênh chat với Rails
   Ta sẽ sử dụng opentok sdk để tạo một room chat chung. Với rail ta có sẵn gem "opentok".
   Ý tưởng : Sẽ tạo ra các room chat. Mỗi room sẽ có 1 session_id gắn với opentok. Khi user join vào room đó sẽ gọi đến sdk của opentok và nó sẽ tạo ra 1 stream mới .
 Đầu tiên chúng ta phải đăng kí 1 app trên trang developercủa opentok: https://tokbox.com/developer/.
@@ -31,5 +31,5 @@ Cuối cùng là connect với open tok thông qua api_key và token của clien
 session.connect(apiKey, token);
 
 
-4. Demo
+IV/. Demo
 
