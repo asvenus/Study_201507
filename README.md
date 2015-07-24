@@ -24,6 +24,7 @@ access đến các fucntion của opentok của ta. Table room có attributes: {
 đó. 
 
 Phía dưới client side.
+
 Opentok có hẳn 1 thư viện js để giúp hiển thị các màn hình video chat của từng client. có thể tải tại đây:
 http://static.opentok.com/webrtc/v2.0/js/TB.min.js"
 Phía dưới client sẽ tạo ra 1 session thông qua session_id của room. Session sẽ lắng nghe nếu có 1 client mới join vào sẽ tạo ra 1 stream mới và add vào thẻ body thông qua 2 event handles:
