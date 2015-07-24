@@ -16,12 +16,12 @@ III/ Sử dụng OpenTok để tạo 1 kênh chat với Rails
 Đầu tiên chúng ta phải đăng kí 1 app trên trang developercủa opentok: https://tokbox.com/developer/.
 Một app trial dùng dc trong 30 ngày, giá để mua licence là 50$/month(đắt quá).
 Một app cũng giống như facebook app sẽ có cặp api_key và secrets.
-Trên serer side:
+  Trên serer side:
 - Khi tạo 1 room mới ta sẽ taọ 1 session_id của room. Session này dc tạo ra từ sdk opentok. Nó cho phép người dùng
 access đến các fucntion của opentok của ta. Table room có attributes: {id, session_id}
 - Khi 1 người dùng join vào room, Opentok sẽ tạo ra 1 session_id của người dùng thông qua session_id của room 
 đó. 
-Phía dưới client side.
+  Phía dưới client side.
 Opentok có hẳn 1 thư viện js để giúp hiển thị các màn hình video chat của từng client. có thể tải tại đây:
 http://static.opentok.com/webrtc/v2.0/js/TB.min.js"
 Phía dưới client sẽ tạo ra 1 session thông qua session_id của room. Session sẽ lắng nghe nếu có 1 client mới join vào sẽ tạo ra 1 stream mới và add vào thẻ body thông qua 2 event handles:
@@ -84,9 +84,9 @@ Một session sẽ cung cấp các function của open tok. Các functionaly có
 2 event hander đáng chú ý của nó là sessionConnected và streamCreated hiểu nôm na sẽ tạo ra 1 stream mới khi client join room và connect tới room đó sau khi stream đó dc tạo.
 
 ```javascript
-session.addEventListener("sessionConnected", sessionConnectedHandler);
+    session.addEventListener("sessionConnected", sessionConnectedHandler);
       session.addEventListener("streamCreated", streamCreatedHandler);
-      session.connect(45281572, "<%= @tok_token %>"); // Replace with your API key and token. See https://dashboard.tokbox.com/projects
+      session.connect(api_key, "<%= @tok_token %>");
       function sessionConnectedHandler(event) {
          subscribeToStreams(event.streams);
          session.publish();
@@ -112,6 +112,10 @@ session.addEventListener("sessionConnected", sessionConnectedHandler);
           session.subscribe(streams[i], div.id);
         }
    ```
-
+V/ Tài liệu tham khảo:
+https://github.com/loganathan-s/vide0-chat-using-tokbox
+https://github.com/opentok/Opentok-Ruby-SDK
+http://www.tokbox.com/blog/building-a-video-party-app-with-ruby-on-rails/
+https://tokbox.com/developer/
 
 
