@@ -117,8 +117,11 @@ Một session sẽ cung cấp các function của open tok. Các functionaly có
    ```
 ## V/ Tài liệu tham khảo:
 https://github.com/loganathan-s/vide0-chat-using-tokbox
+
 https://github.com/opentok/Opentok-Ruby-SDK
+
 http://www.tokbox.com/blog/building-a-video-party-app-with-ruby-on-rails/
+
 https://tokbox.com/developer/
 
 
