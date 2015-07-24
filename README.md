@@ -16,15 +16,14 @@ video.
 Đầu tiên chúng ta phải đăng kí 1 app trên trang developercủa opentok: https://tokbox.com/developer/.
 Một app trial dùng dc trong 30 ngày, giá để mua licence là 50$/month(đắt quá).
 Một app cũng giống như facebook app sẽ có cặp api_key và secrets.
+
   Trên serer side:
-  
 - Khi tạo 1 room mới ta sẽ taọ 1 session_id của room. Session này dc tạo ra từ sdk opentok. Nó cho phép người dùng
 access đến các fucntion của opentok của ta. Table room có attributes: {id, session_id}
 - Khi 1 người dùng join vào room, Opentok sẽ tạo ra 1 session_id của người dùng thông qua session_id của room 
 đó. 
 
-  Phía dưới client side.
-
+Phía dưới client side.
 Opentok có hẳn 1 thư viện js để giúp hiển thị các màn hình video chat của từng client. có thể tải tại đây:
 http://static.opentok.com/webrtc/v2.0/js/TB.min.js"
 Phía dưới client sẽ tạo ra 1 session thông qua session_id của room. Session sẽ lắng nghe nếu có 1 client mới join vào sẽ tạo ra 1 stream mới và add vào thẻ body thông qua 2 event handles:
@@ -78,7 +77,7 @@ của room và token của client đó.
     @token = OpenTok::OpenTok.new(api_key,api_secret).generate_token @session_id
 ```
 Dưới client side:
-Bên dưới client sẽ nhận được 3 biến truyền xuống( api_key, session_id và token)
+  Bên dưới client sẽ nhận được 3 biến truyền xuống( api_key, session_id và token)
 chúng ta khởi tạo 1 session bằng hàm 
 ```javascript
 var session = TB.initSession("<%= @room.session_id %>")
