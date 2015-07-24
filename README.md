@@ -45,7 +45,36 @@ class CreateRooms < ActiveRecord::Migration
 end
 ```
 Trên server side:
-Trong rooms_controlle.rb sẽ có các action `new` và `create` `show`.
+Trong rooms_controlle.rb sẽ có các action  `create` và  `show`.
+Ta sẽ tạo một room  và gắn session_id dc lấy từ opentok.
+```ruby 
+def create
+@opentok = OpenTok::OpenTok.new API_KEY, API_SECRET
+    session = @opentok.create_session
+    @room = Room.new(session_obj: session.session_id)
+    .........................
+end
+```
+Trong function trên một @opentok được tạo ra từ app ta đăng kí với key and secret.
+1 session dạng object: 
+``` ruby
+=> #<OpenTok::Session:0x007fe35167e580
+ @api_key="#{api_key}",
+ @api_secret="#{api_secret}",
+ @archive_mode=:manual,
+ @location=nil,
+ @media_mode=:relayed,
+ @session_id="2_MX40NTI5MDg2Mn5-MTQzNzcxNTc5MjE4NX5wSmRyZzc4cEVRMlBMOUp4bnBRMGNwV2h-UH4">
+```
+Ta lưu session_id của room vào bảng room. 1 session là duy nhất.
+
+Khi 1 user join vào room sẽ gọi đến action `show` Tại đây ta sẽ truyền 2 thông số xuống view bao gồm @session_id
+của room và token của client đó.
+```ruby
+    @session_id = @room.session_obj
+    @token = OpenTok::OpenTok.new(api_key,api_secret).generate_token @session_id
+    ```
+   Dưới client side:
 
 
 
