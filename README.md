@@ -73,8 +73,45 @@ của room và token của client đó.
 ```ruby
     @session_id = @room.session_obj
     @token = OpenTok::OpenTok.new(api_key,api_secret).generate_token @session_id
-    ```
-   Dưới client side:
+```
+Dưới client side:
+Bên dưới client sẽ nhận được 3 biến truyền xuống( api_key, session_id và token)
+chúng ta khởi tạo 1 session bằng hàm 
+```javascript
+var session = TB.initSession("<%= @room.session_id %>")
+```
+Một session sẽ cung cấp các function của open tok. Các functionaly có thể tham khảo ơ đây: https://tokbox.com/developer/sdks/js/reference/Session.html.
+2 event hander đáng chú ý của nó là sessionConnected và streamCreated hiểu nôm na sẽ tạo ra 1 stream mới khi client join room và connect tới room đó sau khi stream đó dc tạo.
+
+```javascript
+session.addEventListener("sessionConnected", sessionConnectedHandler);
+      session.addEventListener("streamCreated", streamCreatedHandler);
+      session.connect(45281572, "<%= @tok_token %>"); // Replace with your API key and token. See https://dashboard.tokbox.com/projects
+      function sessionConnectedHandler(event) {
+         subscribeToStreams(event.streams);
+         session.publish();
+      }
+
+      function streamCreatedHandler(event) {
+        subscribeToStreams(event.streams);
+      }
+
+      function subscribeToStreams(streams) {
+        for (var i = 0; i < streams.length; i++) {
+        // Make sure we don't subscribe to ourself
+          if (streams[i].connection.connectionId == session.connection.connectionId) {
+            return;
+          }
+
+          // Create the div to put the subscriber element in to
+          var div = document.createElement('div');
+          div.setAttribute('id', 'stream' + streams[i].streamId);
+          document.body.appendChild(div);
+
+          // Subscribe to the stream
+          session.subscribe(streams[i], div.id);
+        }
+   ```
 
 
 
