@@ -33,3 +33,19 @@ session.connect(apiKey, token);
 
 IV/. Demo
 
+Đầu tiên cần 1 table room:
+```ruby
+class CreateRooms < ActiveRecord::Migration
+  def change
+    create_table :rooms do |t|
+      t.string :session_id
+      t.timestamps null: false
+    end
+  end
+end
+```
+Trên server side:
+Trong rooms_controlle.rb sẽ có các action `new` và `create` `show`.
+
+
+
