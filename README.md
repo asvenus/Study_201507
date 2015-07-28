@@ -104,15 +104,29 @@ var session = TB.initSession(sessionId)
 Một session sẽ cung cấp các function của open tok. Các functionaly có thể tham khảo ở đây: https://tokbox.com/developer/sdks/js/reference/Session.html.
 2 event hander đáng chú ý của nó là sessionConnected và streamCreated hiểu nôm na sẽ tạo ra 1 stream mới khi client join room và connect tới room đó sau khi stream đó dc tạo. Có 2 cách để tạo dùng function on() or addEvenListener()
 ```javascript
-  sessionConnected: function(event) {
-      session.publish(publisher);
-    },
+  session.on({
+      sessionConnected: function(event) {
+      },
+      streamCreated: function(event){
+      }
+   })
+   
 ```
+hoặc
+  ```javascript
+   session.addEventListener("sessionConnected", sessionConnectedHandler);
+   session.addEventListener("streamCreated", streamCreatedHandler);
+   function sessionConnectedHandler(event) {}
+   function streamCreatedHandler(){}
+  ```
 sessionConnected:
 
    function được run khi session.connect() được chạy. 
    hàm session.publish(publisher) sẽ inittializer một publisher gán vào element có id = "publisher".
-   Ta định nghĩa một publisher = TB.initPublisher(apiKey, 'publisher');
+   Ta định nghĩa một 
+   ```javascript
+       publisher = TB.initPublisher(apiKey, 'publisher');
+   ```
    với 'publisher' là id của một element html.
    
 streamCreated:
