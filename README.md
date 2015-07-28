@@ -82,7 +82,7 @@ của room và token của client đó.
     @token = OpenTok::OpenTok.new(api_key,api_secret).generate_token @session_id
 ```
 Token được tạo ra dựa vào session_id của room đó. có thể thay đổi option cho token đó như thơi gian hết hạn, role là publisher hay moderator bằng thêm tùy chọn ví dụ như sau: 
-``ruby
+```ruby
 @token = OpenTok::OpenTok.new(api_key,api_secret).generate_token({
     :role        => :moderator
     :expire_time => Time.now.to_i+(7 * 24 * 60 * 60) # in one week
@@ -91,43 +91,57 @@ Token được tạo ra dựa vào session_id của room đó. có thể thay đ
 ```
 Dưới client side:
   Bên dưới client sẽ nhận được 3 biến truyền xuống( api_key, session_id và token)
+  ```javascript
+  var apiKey = '45295772';
+  var sessionId =  "#{@session_id}";
+  var token = "#{@token}";
+   ```
 chúng ta khởi tạo 1 session bằng hàm 
 ```javascript
-var session = TB.initSession("<%= @room.session_id %>")
+var session = TB.initSession(sessionId)
 ```
  5.Javascript hoạt động như nào
-Một session sẽ cung cấp các function của open tok. Các functionaly có thể tham khảo ơ đây: https://tokbox.com/developer/sdks/js/reference/Session.html.
-2 event hander đáng chú ý của nó là sessionConnected và streamCreated hiểu nôm na sẽ tạo ra 1 stream mới khi client join room và connect tới room đó sau khi stream đó dc tạo.
-
+Một session sẽ cung cấp các function của open tok. Các functionaly có thể tham khảo ở đây: https://tokbox.com/developer/sdks/js/reference/Session.html.
+2 event hander đáng chú ý của nó là sessionConnected và streamCreated hiểu nôm na sẽ tạo ra 1 stream mới khi client join room và connect tới room đó sau khi stream đó dc tạo. Có 2 cách để tạo dùng function on() or addEvenListener()
 ```javascript
-    session.addEventListener("sessionConnected", sessionConnectedHandler);
-      session.addEventListener("streamCreated", streamCreatedHandler);
-      session.connect(api_key, "<%= @tok_token %>");
-      function sessionConnectedHandler(event) {
-         subscribeToStreams(event.streams);
-         session.publish();
-      }
+  sessionConnected: function(event) {
+      session.publish(publisher);
+    },
+```
+sessionConnected: function được run khi session.connect() được chạy. 
+hàm session.publish(publisher) sẽ inittializer một publisher gán vào element có id = "publisher".
+Ta định nghĩa một publisher = TB.initPublisher(apiKey, 'publisher');
+với 'publisher' là id của một element html.
+streamCreated: function run khi một client khác publish một stream. Với hàm này nó sẽ tự động lắng nghe xem có 1 client mới join vào hay không. nếu có sẽ tạo một container cho 1 subcriber mới . Sau đó sẽ append chúng vào thẻ "subscribers"
+Cuối cùng sẽ connect sử dụng api_key và token phía trên truyền xuống.
+```javascrip
+   session.connect(apiKey, token);
+```
+Toàn bộ code javascript cho show room sẽ như sau:
+```javascrip
+:javascript
+  var apiKey = '45295772';
+  var sessionId =  "#{@session_id}";
+  var token = "#{@token}";
+  var session = TB.initSession(sessionId);
+  var publisher = TB.initPublisher(apiKey, 'publisher');
+  session.on({
+    sessionConnected: function(event) {
+      session.publish(publisher);
+    },
+    streamCreated: function(event) {
+      var subContainer = document.createElement('div');
+      subContainer.id = 'stream-' + event.stream.streamId;
+      document.getElementById('subscribers').appendChild(subContainer);
+      session.subscribe(event.stream, subContainer);
+    }
+  });
+  session.connect(apiKey, token);
+```
 
-      function streamCreatedHandler(event) {
-        subscribeToStreams(event.streams);
-      }
-
-      function subscribeToStreams(streams) {
-        for (var i = 0; i < streams.length; i++) {
-        // Make sure we don't subscribe to ourself
-          if (streams[i].connection.connectionId == session.connection.connectionId) {
-            return;
-          }
-
-          // Create the div to put the subscriber element in to
-          var div = document.createElement('div');
-          div.setAttribute('id', 'stream' + streams[i].streamId);
-          document.body.appendChild(div);
-
-          // Subscribe to the stream
-          session.subscribe(streams[i], div.id);
-        }
-   ```
+6. Kết quả. Sẽ tạo ra một trang chat video với nhau (bao gôm voice chat và video chat). Cứ mỗi khi thêm 1 client join vào room chat sẽ tạo thêm 1 màn hình mới của client đó.
+Bạn có thể tuy biến để tạo thêm các tính năng như màn hình sharing, chỉ chat voice ... Tham khảo tại guide của tobbox:
+https://tokbox.com/developer/#guides
 ## V/ Tài liệu tham khảo:
 https://github.com/loganathan-s/vide0-chat-using-tokbox
 
