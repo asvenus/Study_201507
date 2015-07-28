@@ -108,11 +108,15 @@ Một session sẽ cung cấp các function của open tok. Các functionaly có
       session.publish(publisher);
     },
 ```
-sessionConnected: function được run khi session.connect() được chạy. 
-hàm session.publish(publisher) sẽ inittializer một publisher gán vào element có id = "publisher".
-Ta định nghĩa một publisher = TB.initPublisher(apiKey, 'publisher');
-với 'publisher' là id của một element html.
-streamCreated: function run khi một client khác publish một stream. Với hàm này nó sẽ tự động lắng nghe xem có 1 client mới join vào hay không. nếu có sẽ tạo một container cho 1 subcriber mới . Sau đó sẽ append chúng vào thẻ "subscribers"
+sessionConnected:
+
+   function được run khi session.connect() được chạy. 
+   hàm session.publish(publisher) sẽ inittializer một publisher gán vào element có id = "publisher".
+   Ta định nghĩa một publisher = TB.initPublisher(apiKey, 'publisher');
+   với 'publisher' là id của một element html.
+streamCreated:
+
+   function này run khi một client khác publish một stream. Với hàm này nó sẽ tự động lắng nghe xem có 1 client mới join     vào hay không. nếu có sẽ tạo một container cho 1 subcriber mới . Sau đó sẽ append chúng vào thẻ "subscribers"
 Cuối cùng sẽ connect sử dụng api_key và token phía trên truyền xuống.
 ```javascrip
    session.connect(apiKey, token);
