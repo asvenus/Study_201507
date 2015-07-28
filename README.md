@@ -35,7 +35,12 @@ session.connect(apiKey, token);
 
 
 ## IV/. Demo
-
+1.Đang kí api. Có thể vào https://dashboard.tokbox.com/ để đăng kí và tạo 1 một app free trong 30 ngày. Bản thương mại có giá 50$/month.
+Một app có api_key và app_secret 
+2. Rất đơn giản ta thêm gem opentok vào trong gemfile:
+    gem "opentok"
+và bundle. Khi đó module OpenTok::OpenTok được tạo ra.
+3. Tạo room
 Đầu tiên cần 1 table room:
 ```ruby
 class CreateRooms < ActiveRecord::Migration
@@ -47,9 +52,7 @@ class CreateRooms < ActiveRecord::Migration
   end
 end
 ```
-Trên server side:
-Trong rooms_controlle.rb sẽ có các action  `create` và  `show`.
-Ta sẽ tạo một room  và gắn session_id dc lấy từ opentok.
+Mỗi một  room sẽ có môt session_id được tạo từ opentok là duy nhất. Việc tạo room được thưc hiện trong action `create` như sau:
 ```ruby 
 def create
 @opentok = OpenTok::OpenTok.new API_KEY, API_SECRET
@@ -70,12 +73,21 @@ Trong function trên một @opentok được tạo ra từ app ta đăng kí v�
  @session_id="2_MX40NTI5MDg2Mn5-MTQzNzcxNTc5MjE4NX5wSmRyZzc4cEVRMlBMOUp4bnBRMGNwV2h-UH4">
 ```
 Ta lưu session_id của room vào bảng room. 1 session là duy nhất.
-
+4. Show room.
+Trên server side
 Khi 1 user join vào room sẽ gọi đến action `show` Tại đây ta sẽ truyền 2 thông số xuống view bao gồm @session_id
 của room và token của client đó.
 ```ruby
     @session_id = @room.session_obj
     @token = OpenTok::OpenTok.new(api_key,api_secret).generate_token @session_id
+```
+Token được tạo ra dựa vào session_id của room đó. có thể thay đổi option cho token đó như thơi gian hết hạn, role là publisher hay moderator bằng thêm tùy chọn ví dụ như sau: 
+``ruby
+@token = OpenTok::OpenTok.new(api_key,api_secret).generate_token({
+    :role        => :moderator
+    :expire_time => Time.now.to_i+(7 * 24 * 60 * 60) # in one week
+    :data        => 'name=Johnny'
+});
 ```
 Dưới client side:
   Bên dưới client sẽ nhận được 3 biến truyền xuống( api_key, session_id và token)
@@ -83,6 +95,7 @@ chúng ta khởi tạo 1 session bằng hàm
 ```javascript
 var session = TB.initSession("<%= @room.session_id %>")
 ```
+ 5.Javascript hoạt động như nào
 Một session sẽ cung cấp các function của open tok. Các functionaly có thể tham khảo ơ đây: https://tokbox.com/developer/sdks/js/reference/Session.html.
 2 event hander đáng chú ý của nó là sessionConnected và streamCreated hiểu nôm na sẽ tạo ra 1 stream mới khi client join room và connect tới room đó sau khi stream đó dc tạo.
 
